@@ -25,7 +25,7 @@ BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-clock = pygame.time.clock()
+clock = pygame.time.Clock()
 
 class Bird:
     def __init__(self):
@@ -57,10 +57,56 @@ class Pipe:
         self.height = random.randint(100, 100)
         self.passed = False
 
-        def update(self):
-            self.x -= 5
+    def update(self):
+        self.x -= 5
 
-        def draw(self, screen):
-            pygame.draw.rect(screen, BLACK, ( self.x, 0, PIPE_WIDTH, self.height))
-            pygame.draw.rect(self.x, self.height + PIPE_GAP, PIPE_WIDTH, SCREEN_HEIGHT)
-        def collide(self, bird)
+    def draw(self, screen):
+        pygame.draw.rect(screen, BLACK, ( self.x, 0, PIPE_WIDTH, self.height))
+        pygame.draw.rect(screen, BLACK, (self.x, self.height + PIPE_GAP, PIPE_WIDTH, SCREEN_HEIGHT - (self.height + PIPE_GAP)))
+    def collide(self, bird):
+        if bird.y < self.height or bird.y + BIRD_HEIGH > self.height + PIPE_GAP:
+            if self.x < bird.x + BIRD_WIDTH < self.x + PIPE_WIDTH:
+                return True
+            return False
+            
+def main():
+    bird = Bird()
+    pipes = [Pipe()]
+    score = 0
+    running = True
+
+    while running:
+        screen.fill(WHITE)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    bird.jump()
+
+        bird.update()
+
+
+        for pipe in pipes:
+
+            pipe.update()
+
+            if pipe.collide(bird):
+                running = False
+
+            if pipe.x + PIPE_WIDTH < 0:
+                pipes.remove(pipe)
+                pipes.append(Pipe())
+                bird.score += 1
+
+
+        bird.draw(screen)
+
+        for pipe in pipes:
+            pipe.draw(screen)
+
+        pygame.display.update()
+        clock.tick(30)
+    pygame.quit()
+if __name__ == "__main__":
+    main()
