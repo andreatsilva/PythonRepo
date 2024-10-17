@@ -4,9 +4,9 @@ import ctypes
 
 
 
-DOWNLOADS_FOLDER = Path.home() / "Downloads"
-TARGET_FOLDER = Path.home() / "Desktop" / "Organized"
+DOWNLOADS_FOLDER = Path.home() / input("Please insert the path where the files are located: ")
 
+TARGET_FOLDER = Path.home() / "Desktop" / "Organized"
 
 FILE_CATEGORIES = {
     "Images": [".jpg", ".jpeg", ".png", ".gif", ".bmp"],
